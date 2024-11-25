@@ -155,5 +155,3 @@ Please generate a [GitHub issue](https://github.com/codedthemes/datta-able-free-
 - Dribbble [https://dribbble.com/codedthemes](https://dribbble.com/codedthemes)
 - Facebook [https://www.facebook.com/codedthemes](https://www.facebook.com/codedthemes)
 - Twitter [https://twitter.com/codedthemes](https://twitter.com/codedthemes)
-#   q u i n t a - d o - y p u a - f r o n t e n d  
- 
