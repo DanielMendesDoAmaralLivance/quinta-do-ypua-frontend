@@ -57,6 +57,11 @@ const routes = [
       },
       {
         exact: 'true',
+        path: '/app/accommodations',
+        element: lazy(() => import('./views/accommodations'))
+      },
+      {
+        exact: 'true',
         path: '/app/dashboard/default',
         element: lazy(() => import('./views/dashboard'))
       },

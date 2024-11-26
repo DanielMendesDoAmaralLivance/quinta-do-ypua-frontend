@@ -5,13 +5,16 @@ import { PencilFill, TrashFill } from 'react-bootstrap-icons';
 
 const GuestsPage = () => {
   const [data, setData] = useState();
+
   const [showGuestModal, setShowGuestModal] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const [id, setId] = useState(undefined);
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
   const [document, setDocument] = useState();
-  const [isLoading, setIsLoading] = useState(false);
 
   const getAll = async () => {
     setIsLoading(true);
@@ -89,7 +92,6 @@ const GuestsPage = () => {
               <Button variant="primary" className="text-capitalize" onClick={() => setShowGuestModal(true)}>
                 + Criar
               </Button>
-              <i className="bi bi-pencil"></i>
 
               <Table responsive hover>
                 {isLoading ? (

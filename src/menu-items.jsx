@@ -2,7 +2,7 @@ const menuItems = {
   items: [
     {
       id: 'navigation',
-      title: 'Navigation',
+      title: 'Navegação',
       type: 'group',
       icon: 'icon-navigation',
       children: [
@@ -10,8 +10,15 @@ const menuItems = {
           id: 'guests',
           title: 'Hóspedes',
           type: 'item',
-          icon: 'feather icon-avatar',
+          icon: 'feather icon-user',
           url: '/app/guests'
+        },
+        {
+          id: 'accommodations',
+          title: 'Acomodações',
+          type: 'item',
+          icon: 'feather icon-home',
+          url: '/app/accommodations'
         }
       ]
     },
