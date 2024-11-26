@@ -3010,6 +3010,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bootstrap-icons@npm:^1.11.3":
+  version: 1.11.3
+  resolution: "bootstrap-icons@npm:1.11.3"
+  checksum: 10c0/37eefd418c6bbbb304bdff0f2ed527f82c3c6f331d3e3a7c4aa8bbdbaf7118bb86725b024f85e7d738c613d48c7353cd81c09e58e9d8d34c5633960fdec8410b
+  languageName: node
+  linkType: hard
+
 "bootstrap@npm:^5.3.3":
   version: 5.3.3
   resolution: "bootstrap@npm:5.3.3"
@@ -3683,6 +3690,7 @@ __metadata:
     "@testing-library/user-event": "npm:^14.5.2"
     "@vitejs/plugin-react": "npm:^4.2.1"
     bootstrap: "npm:^5.3.3"
+    bootstrap-icons: "npm:^1.11.3"
     chance: "npm:^1.1.11"
     d3: "npm:^7.9.0"
     env-cmd: "npm:^10.1.0"
@@ -3702,6 +3710,7 @@ __metadata:
     process: "npm:^0.11.10"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.2"
+    react-bootstrap-icons: "npm:^1.11.4"
     react-copy-to-clipboard: "npm:^5.1.0"
     react-dom: "npm:^18.2.0"
     react-error-overlay: "npm:6.0.11"
@@ -6389,7 +6398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -6418,6 +6427,17 @@ __metadata:
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
   checksum: 10c0/900a93d3cdae3acd7d16f642c29a642aea32c2026446151f0778c62ac089d4b8e6c986811076e1ae180a694cedf077d453a11b58ff0a865629a4f82ab558e102
+  languageName: node
+  linkType: hard
+
+"react-bootstrap-icons@npm:^1.11.4":
+  version: 1.11.4
+  resolution: "react-bootstrap-icons@npm:1.11.4"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: ">=16.8.6"
+  checksum: 10c0/1ed39006eb8f3883f14438c1604ad4b2e41578d0b9c5f33477062e01196cfe01ed9c1db9494602444a37f28c57a66dd444ba8800023a0d9303b7d1c05b2452d1
   languageName: node
   linkType: hard
 

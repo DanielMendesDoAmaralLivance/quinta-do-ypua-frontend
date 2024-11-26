@@ -52,6 +52,11 @@ const routes = [
     routes: [
       {
         exact: 'true',
+        path: '/app/guests',
+        element: lazy(() => import('./views/guests'))
+      },
+      {
+        exact: 'true',
         path: '/app/dashboard/default',
         element: lazy(() => import('./views/dashboard'))
       },

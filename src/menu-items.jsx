@@ -7,11 +7,11 @@ const menuItems = {
       icon: 'icon-navigation',
       children: [
         {
-          id: 'dashboard',
-          title: 'Dashboard',
+          id: 'guests',
+          title: 'Hóspedes',
           type: 'item',
-          icon: 'feather icon-home',
-          url: '/app/dashboard/default'
+          icon: 'feather icon-avatar',
+          url: '/app/guests'
         }
       ]
     },
