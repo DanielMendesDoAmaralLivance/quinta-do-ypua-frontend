@@ -4,7 +4,7 @@ import { BASE_API_URL } from '../../config/constant';
 import { PencilFill, TrashFill } from 'react-bootstrap-icons';
 
 const GuestsPage = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
 
   const [showGuestModal, setShowGuestModal] = useState(false);
 

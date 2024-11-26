@@ -1,16 +1,17 @@
+import { BASE_API_URL } from 'config/constant';
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { EyeSlashFill, PencilFill } from 'react-bootstrap-icons';
 
-const Accommodation = () => {
+const Accommodation = ({ accommodation }) => {
   return (
     <Card>
-      <Card.Img variant="top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFXmiZLC7bG8YMjqzV8xpmpzqIgxHCt-3chA&s" />
+      <Card.Img variant="top" src={`${BASE_API_URL}/uploads/${accommodation.fileUrl}`} />
       <Card.Header>
-        <Card.Title as="h5">Casa master</Card.Title>
+        <Card.Title as="h5">{accommodation.name}</Card.Title>
       </Card.Header>
       <Card.Body>
-        <Card.Text>Isso é um teste, você vai se surpreender com esta pousada.</Card.Text>
+        <Card.Text>{accommodation.description}</Card.Text>
       </Card.Body>
       <Card.Footer style={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <Button variant="primary">+ Reserva</Button>
