@@ -1,15 +1,16 @@
 import { BASE_API_URL } from 'config/constant';
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Modal, Col, Row, Form, ListGroup } from 'react-bootstrap';
+import { Card, Button, Modal, Col, Row, Form, ListGroup, Image } from 'react-bootstrap';
 import { ClockFill, EyeSlashFill, MoonFill, PencilFill, PersonFill, SunFill } from 'react-bootstrap-icons';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Accommodation = ({ accommodation }) => {
   const [showCreateReservationModal, setShowCreateReservationModal] = useState(false);
+  const [showAccommodationModal, setShowAccommodationModal] = useState(false);
 
   const notify = () =>
-    toast.success('Reserva criada com sucesso!', {
+    toast.success('Criado com sucesso!', {
       position: 'top-right',
       autoClose: 2500,
       hideProgressBar: false,
@@ -47,7 +48,14 @@ const Accommodation = ({ accommodation }) => {
         show={showCreateReservationModal}
         handleClose={() => {
           setShowCreateReservationModal(false);
-          notify();
+        }}
+        accommodation={accommodation}
+        notify={notify}
+      />
+      <AccommodationModal
+        show={showAccommodationModal}
+        handleClose={() => {
+          setShowAccommodationModal(false);
         }}
         accommodation={accommodation}
       />
@@ -68,7 +76,7 @@ const Accommodation = ({ accommodation }) => {
   );
 };
 
-const CreateReservationModal = ({ show, handleClose, accommodation }) => {
+const CreateReservationModal = ({ show, handleClose, accommodation, notify }) => {
   const [guestsData, setGuestsData] = useState([]);
 
   const [guests, setGuests] = useState(0);
@@ -134,6 +142,7 @@ const CreateReservationModal = ({ show, handleClose, accommodation }) => {
 
     if (response.ok) {
       handleClose();
+      notify();
     }
   };
 
@@ -340,6 +349,128 @@ const CreateReservationModal = ({ show, handleClose, accommodation }) => {
         </Modal.Footer>
       </Modal>
     </>
+  );
+};
+
+export const AccommodationModal = ({ show, handleClose, accommodation }) => {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [pricePerNight, setPricePerNight] = useState(0);
+  const [checkin, setCheckin] = useState('');
+  const [checkout, setCheckout] = useState('');
+  const [guests, setGuests] = useState(0);
+  const [beds, setBeds] = useState(0);
+  const [minNights, setMinNights] = useState(0);
+  const [file, setFile] = useState();
+  const [previewImage, setPreviewImage] = useState();
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+
+    const previewUrl = URL.createObjectURL(selectedFile);
+    setPreviewImage(previewUrl);
+  };
+
+  return (
+    <Modal show={show} onHide={handleClose} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>{accommodation ? 'Editar' : 'Criar'} acomodação</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {true ? (
+          <div
+            style={{
+              width: '100%',
+              height: 300,
+              backgroundImage: `url(${previewImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          ></div>
+        ) : (
+          <></>
+        )}
+
+        <Form>
+          <Form.Group controlId="fileUrl" className="mb-3">
+            <Form.Label>Escolha uma imagem para a acomodação</Form.Label>
+            <Form.Control type="file" onChange={handleFileChange} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="name">
+            <Form.Label>Nome</Form.Label>
+            <Form.Control type="text" placeholder="Digite o nome" value={name} onChange={(e) => setName(e.target.value)} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="description">
+            <Form.Label>Descrição</Form.Label>
+            <Form.Control
+              as="textarea"
+              placeholder="Digite a descrição"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Form.Group>
+
+          <Row>
+            <Col>
+              <Form.Group className="mb-3" controlId="checkin">
+                <Form.Label>Horário de check-in</Form.Label>
+                <Form.Control type="time" value={checkin} onChange={(e) => setCheckin(e.target.value)} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className="mb-3" controlId="checkout">
+                <Form.Label>Horário de check-out</Form.Label>
+                <Form.Control type="time" value={checkout} onChange={(e) => setCheckout(e.target.value)} />
+              </Form.Group>
+            </Col>
+            <Col>
+              {' '}
+              <Form.Group className="mb-3" controlId="pricePerNight">
+                <Form.Label>Preço por noite</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="0.00"
+                  value={pricePerNight}
+                  onChange={(e) => setPricePerNight(Number(e.target.value))}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <Form.Group className="mb-3" controlId="guests">
+                <Form.Label>Quantidade maxima de hóspedes</Form.Label>
+                <Form.Control type="number" placeholder="0" value={guests} onChange={(e) => setGuests(Number(e.target.value))} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className="mb-3" controlId="beds">
+                <Form.Label>Quantidade de camas</Form.Label>
+                <Form.Control type="number" placeholder="0" value={beds} onChange={(e) => setBeds(Number(e.target.value))} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className="mb-3" controlId="minNights">
+                <Form.Label>Quantidade mínima de noites</Form.Label>
+                <Form.Control type="number" placeholder="0" value={minNights} onChange={(e) => setMinNights(Number(e.target.value))} />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Fechar
+        </Button>
+        <Button variant="primary" onClick={() => console.log(accommodation)}>
+          Salvar
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
