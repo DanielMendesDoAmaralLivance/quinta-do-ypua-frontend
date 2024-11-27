@@ -1,8 +1,8 @@
 import { BASE_API_URL } from 'config/constant';
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Modal, Col, Row, Form, ListGroup, Image } from 'react-bootstrap';
+import { Card, Button, Modal, Col, Row, Form, ListGroup } from 'react-bootstrap';
 import { ClockFill, EyeSlashFill, MoonFill, PencilFill, PersonFill, SunFill } from 'react-bootstrap-icons';
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import { Slide, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Accommodation = ({ accommodation }) => {
@@ -25,7 +25,11 @@ const Accommodation = ({ accommodation }) => {
   return (
     <>
       <Card>
-        <Card.Img variant="top" src={`${BASE_API_URL}/uploads/${accommodation.fileUrl}`} />
+        <Card.Img
+          variant="top"
+          src={`${BASE_API_URL}/uploads/${accommodation.fileUrl}`}
+          style={{ height: 350, width: '100%', objectFit: 'cover' }}
+        />
         <Card.Header>
           <Card.Title as="h5">{accommodation.name}</Card.Title>
         </Card.Header>
@@ -58,19 +62,6 @@ const Accommodation = ({ accommodation }) => {
           setShowAccommodationModal(false);
         }}
         accommodation={accommodation}
-      />
-      <ToastContainer
-        position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme="light"
-        transition={Slide}
       />
     </>
   );
@@ -352,7 +343,7 @@ const CreateReservationModal = ({ show, handleClose, accommodation, notify }) =>
   );
 };
 
-export const AccommodationModal = ({ show, handleClose, accommodation }) => {
+export const AccommodationModal = ({ show, handleClose, accommodation, notify, getAll }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [pricePerNight, setPricePerNight] = useState(0);
@@ -361,15 +352,46 @@ export const AccommodationModal = ({ show, handleClose, accommodation }) => {
   const [guests, setGuests] = useState(0);
   const [beds, setBeds] = useState(0);
   const [minNights, setMinNights] = useState(0);
-  const [file, setFile] = useState();
+  const [image, setImage] = useState();
   const [previewImage, setPreviewImage] = useState();
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
+    const selectedFile = event.target.files?.[0];
 
+    if (!selectedFile) {
+      setImage(undefined);
+      setPreviewImage(undefined);
+
+      return;
+    }
+
+    setImage(selectedFile);
     const previewUrl = URL.createObjectURL(selectedFile);
     setPreviewImage(previewUrl);
+  };
+
+  const submit = async () => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('pricePerNight', pricePerNight);
+    formData.append('checkin', checkin);
+    formData.append('checkout', checkout);
+    formData.append('guests', guests);
+    formData.append('beds', beds);
+    formData.append('minNights', minNights);
+    formData.append('image', image);
+
+    const response = await fetch(`${BASE_API_URL}/accommodation`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (response.ok) {
+      handleClose();
+      getAll();
+      notify();
+    }
   };
 
   return (
@@ -378,11 +400,11 @@ export const AccommodationModal = ({ show, handleClose, accommodation }) => {
         <Modal.Title>{accommodation ? 'Editar' : 'Criar'} acomodação</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {true ? (
+        {previewImage ? (
           <div
             style={{
               width: '100%',
-              height: 300,
+              height: 400,
               backgroundImage: `url(${previewImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center'
@@ -466,7 +488,7 @@ export const AccommodationModal = ({ show, handleClose, accommodation }) => {
         <Button variant="secondary" onClick={handleClose}>
           Fechar
         </Button>
-        <Button variant="primary" onClick={() => console.log(accommodation)}>
+        <Button variant="primary" onClick={async () => await submit()}>
           Salvar
         </Button>
       </Modal.Footer>

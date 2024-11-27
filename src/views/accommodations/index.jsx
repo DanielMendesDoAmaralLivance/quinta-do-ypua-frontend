@@ -2,6 +2,8 @@ import Accommodation, { AccommodationModal } from 'components/accommodation';
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Spinner, Button } from 'react-bootstrap';
 import { BASE_API_URL } from '../../config/constant';
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AccommodationsPage = () => {
   const [data, setData] = useState([]);
@@ -9,6 +11,19 @@ const AccommodationsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
+
+  const notify = () =>
+    toast.success('Criado com sucesso!', {
+      position: 'top-right',
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+      transition: Slide
+    });
 
   const getAll = async () => {
     setIsLoading(true);
@@ -55,6 +70,21 @@ const AccommodationsPage = () => {
           setShowAccommodationModal(false);
         }}
         accommodation={undefined}
+        notify={notify}
+        getAll={getAll}
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+        transition={Slide}
       />
     </>
   );
