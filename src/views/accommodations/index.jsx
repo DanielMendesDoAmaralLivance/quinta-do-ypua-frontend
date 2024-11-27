@@ -12,8 +12,8 @@ const AccommodationsPage = () => {
 
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
 
-  const notify = () =>
-    toast.success('Criado com sucesso!', {
+  const notify = (message) =>
+    toast.success(message, {
       position: 'top-right',
       autoClose: 2500,
       hideProgressBar: false,
@@ -58,7 +58,7 @@ const AccommodationsPage = () => {
           data?.map((accommodation, index) => {
             return (
               <Col md={4} key={index}>
-                <Accommodation accommodation={{ ...accommodation }} />
+                <Accommodation accommodation={{ ...accommodation }} getAll={getAll} notifyAccommodation={notify} />
               </Col>
             );
           })

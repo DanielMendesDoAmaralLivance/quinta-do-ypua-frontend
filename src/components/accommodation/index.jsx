@@ -5,7 +5,7 @@ import { ClockFill, EyeSlashFill, MoonFill, PencilFill, PersonFill, SunFill } fr
 import { Slide, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Accommodation = ({ accommodation }) => {
+const Accommodation = ({ accommodation, getAll, notifyAccommodation }) => {
   const [showCreateReservationModal, setShowCreateReservationModal] = useState(false);
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
 
@@ -40,7 +40,7 @@ const Accommodation = ({ accommodation }) => {
           <Button variant="primary" onClick={() => setShowCreateReservationModal(true)}>
             + Reserva
           </Button>
-          <Button variant="secondary">
+          <Button variant="secondary" onClick={() => setShowAccommodationModal(true)}>
             <PencilFill size={12} /> Editar
           </Button>
           <Button variant="light">
@@ -61,6 +61,8 @@ const Accommodation = ({ accommodation }) => {
         handleClose={() => {
           setShowAccommodationModal(false);
         }}
+        notify={notifyAccommodation}
+        getAll={getAll}
         accommodation={accommodation}
       />
     </>
@@ -124,7 +126,7 @@ const CreateReservationModal = ({ show, handleClose, accommodation, notify }) =>
         includedLunch,
         includedDinner,
         responsibleGuestId: Number(responsibleGuestId),
-        accommodationId: accommodation.id
+        accommodationId: accommodation.accommodationId
       }),
       headers: {
         'content-type': 'application/json'
@@ -344,15 +346,15 @@ const CreateReservationModal = ({ show, handleClose, accommodation, notify }) =>
 };
 
 export const AccommodationModal = ({ show, handleClose, accommodation, notify, getAll }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [pricePerNight, setPricePerNight] = useState(0);
-  const [checkin, setCheckin] = useState('');
-  const [checkout, setCheckout] = useState('');
-  const [guests, setGuests] = useState(0);
-  const [beds, setBeds] = useState(0);
-  const [minNights, setMinNights] = useState(0);
-  const [image, setImage] = useState();
+  const [name, setName] = useState(accommodation?.name);
+  const [description, setDescription] = useState(accommodation?.description);
+  const [pricePerNight, setPricePerNight] = useState(accommodation?.pricePerNight);
+  const [checkin, setCheckin] = useState(accommodation?.checkin);
+  const [checkout, setCheckout] = useState(accommodation?.checkout);
+  const [guests, setGuests] = useState(accommodation?.guests);
+  const [beds, setBeds] = useState(accommodation?.beds);
+  const [minNights, setMinNights] = useState(accommodation?.minNights);
+  const [image, setImage] = useState(accommodation?.fileUrl ? `${BASE_API_URL}/uploads/${accommodation?.fileUrl}` : '');
   const [previewImage, setPreviewImage] = useState();
 
   const handleFileChange = (event) => {
@@ -382,15 +384,21 @@ export const AccommodationModal = ({ show, handleClose, accommodation, notify, g
     formData.append('minNights', minNights);
     formData.append('image', image);
 
-    const response = await fetch(`${BASE_API_URL}/accommodation`, {
-      method: 'POST',
+    const method = accommodation ? 'PUT' : 'POST';
+
+    const url = accommodation ? `${BASE_API_URL}/accommodation/${accommodation.accommodationId}` : `${BASE_API_URL}/accommodation`;
+
+    const response = await fetch(url, {
+      method,
       body: formData
     });
+
+    const message = accommodation ? 'Editada com sucesso!' : 'Criada com sucesso!';
 
     if (response.ok) {
       handleClose();
       getAll();
-      notify();
+      notify(message);
     }
   };
 
@@ -406,6 +414,16 @@ export const AccommodationModal = ({ show, handleClose, accommodation, notify, g
               width: '100%',
               height: 400,
               backgroundImage: `url(${previewImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          ></div>
+        ) : image ? (
+          <div
+            style={{
+              width: '100%',
+              height: 400,
+              backgroundImage: `url("${image}")`,
               backgroundSize: 'cover',
               backgroundPosition: 'center'
             }}
