@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef } from 'react';
 
 import Navigation from './Navigation';
-import NavBar from './NavBar';
 import Breadcrumb from './Breadcrumb';
 
 import useWindowSize from '../../hooks/useWindowSize';
@@ -45,7 +44,6 @@ const AdminLayout = ({ children }) => {
   let common = (
     <React.Fragment>
       <Navigation />
-      <NavBar />
     </React.Fragment>
   );
 
