@@ -1,7 +1,7 @@
 import { BASE_API_URL } from 'config/constant';
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Modal, Col, Row, Form, ListGroup } from 'react-bootstrap';
-import { ClockFill, EyeSlashFill, MoonFill, PencilFill, PersonFill, SunFill } from 'react-bootstrap-icons';
+import { ClockFill, MoonFill, PencilFill, PersonFill, SunFill } from 'react-bootstrap-icons';
 import { Slide, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,7 +33,7 @@ const Accommodation = ({ accommodation, getAll, notifyAccommodation }) => {
         <Card.Header>
           <Card.Title as="h5">{accommodation.name}</Card.Title>
         </Card.Header>
-        <Card.Body>
+        <Card.Body style={{maxHeight: 165}}>
           <Card.Text>{accommodation.description}</Card.Text>
         </Card.Body>
         <Card.Footer style={{ display: 'flex', justifyContent: 'space-evenly' }}>
@@ -42,9 +42,6 @@ const Accommodation = ({ accommodation, getAll, notifyAccommodation }) => {
           </Button>
           <Button variant="secondary" onClick={() => setShowAccommodationModal(true)}>
             <PencilFill size={12} /> Editar
-          </Button>
-          <Button variant="light">
-            <EyeSlashFill size={15} /> Inativar
           </Button>
         </Card.Footer>
       </Card>

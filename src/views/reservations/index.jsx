@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Table, Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Table, Spinner, Badge, Dropdown } from 'react-bootstrap';
 import { BASE_API_URL } from 'config/constant';
+import { Slide, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ReservationsPage = () => {
   const [data, setData] = useState([]);
@@ -46,13 +48,67 @@ const ReservationsPage = () => {
     );
   };
 
+  const notify = (message) =>
+    toast.success(message, {
+      position: 'top-right',
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+      transition: Slide
+    });
+
+  const updateReservationStatus = async (reservationId, action, message) => {
+    let url = `${BASE_API_URL}/accommodation-reservation/${reservationId}/${action}`;
+
+    await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify({}),
+      headers: {
+        'content-type': 'application/json'
+      }
+    });
+
+    await getAll();
+
+    notify(message);
+  };
+
+  const getBadge = (reservationStatusId) => {
+    return reservationStatusId === 1 ? (
+      <Badge bg="secondary">Confirmada</Badge>
+    ) : reservationStatusId === 3 ? (
+      <Badge bg="primary">Em andamento</Badge>
+    ) : reservationStatusId === 5 ? (
+      <Badge bg="danger">Cancelada</Badge>
+    ) : (
+      <Badge bg="success">Finalizada</Badge>
+    );
+  };
+
   return (
     <React.Fragment>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+        transition={Slide}
+      />
       <Row>
         <Col>
           <Card>
             <Card.Header>
-              <Card.Title as="h5">Hóspedes</Card.Title>
+              <Card.Title as="h5">Reservas</Card.Title>
             </Card.Header>
             <Card.Body>
               <Table responsive hover>
@@ -75,7 +131,7 @@ const ReservationsPage = () => {
                         <th>Refeições</th>
                         <th>Valor total</th>
                         <th>Status</th>
-                        <th>Ações</th>
+                        <th>#</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -132,6 +188,54 @@ const ReservationsPage = () => {
                                     : '-----'}
                             </td>
                             <td>{money(reservation.totalPrice)}</td>
+                            <td>{getBadge(reservation.accommodationReservationStatusId)}</td>
+                            <td>
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="secondary"
+                                  id="dropdown-basic"
+                                  disabled={
+                                    reservation.accommodationReservationStatusId !== 1 && reservation.accommodationReservationStatusId !== 3
+                                  }
+                                >
+                                  Ações
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  {reservation.accommodationReservationStatusId === 1 ? (
+                                    <>
+                                      <Dropdown.Item
+                                        onClick={async () =>
+                                          await updateReservationStatus(reservation.id, 'cancel', 'Reserva cancelada com sucesso!')
+                                        }
+                                      >
+                                        Cancelar
+                                      </Dropdown.Item>
+                                      <Dropdown.Item
+                                        onClick={async () =>
+                                          await updateReservationStatus(reservation.id, 'checkin', 'Check-in realizado com sucesso!')
+                                        }
+                                      >
+                                        Check-in
+                                      </Dropdown.Item>
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}
+                                  {reservation.accommodationReservationStatusId === 3 ? (
+                                    <Dropdown.Item
+                                      onClick={async () =>
+                                        await updateReservationStatus(reservation.id, 'checkout', 'Check-out realizado com sucesso!')
+                                      }
+                                    >
+                                      Check-out
+                                    </Dropdown.Item>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </td>
                           </tr>
                         );
                       })}
